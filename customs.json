@@ -1,0 +1,20 @@
+{
+    "elements": {},
+    "attributes": {
+        "th:text": {
+            "context": "div"
+        },
+        "th:onclick": {
+            "context": "span"
+        },
+        "th:data-id": {
+            "context": "span"
+        },
+        "th:each": {
+            "context": "div"
+        },
+        "th:href": {
+            "context": "a"
+        }
+    }
+}
