@@ -74,7 +74,8 @@ public class Dashboard {
         Transaction tx = transactionService.getAllTransaction().stream().filter(t -> t.getId().equals(id)).findFirst().orElse(null);
                 
         if (tx != null) {
-            transactionService.deleteTransaction(id);
+            transactionService.deleteTransaction(id) ;
+           
         }
         return "redirect:/"; 
     }
