@@ -83,81 +83,10 @@ public class Dashboard {
     @PostMapping("/transaction/update/{id}")
     public String updateTransaction(@PathVariable Integer id, @ModelAttribute Transaction updatedTx) {
             
-        Transaction tx = transactionService.getAllTransaction().stream().filter(t -> t.getId().equals(id)).findFirst().orElse(null);
-                
-        if (tx != null) {
-            // CALCULATE DIFFERENCES (New Form Quantity - Existing Database Quantity)
-            
-            int oldDetergent;
-            int newDetergent; 
-            int detergentDiff;
-            
-            int oldFabcon;
-            int newFabcon; 
-            int fabconDiff; 
-            
-            int oldBleach;
-            int newBleach;
-            int bleachDiff;
-            
-            
-            if(tx.getDetergentQty() != null){
-                oldDetergent = tx.getDetergentQty();
-            }else{
-                oldDetergent = 0;
-            }
-            if(updatedTx.getDetergentQty() != null){
-                newDetergent = updatedTx.getDetergentQty();
-            }else{
-                newDetergent = 0;
-            }
-            detergentDiff = newDetergent - oldDetergent;
-
-            
-            if(tx.getFabconQty() != null){
-                oldFabcon = tx.getFabconQty();
-            }else{
-                oldFabcon= 0;
-            }
-            
-            if(updatedTx.getFabconQty() != null){
-                newFabcon = updatedTx.getFabconQty();
-            }else{
-                newFabcon= 0;
-            }
-            
-            fabconDiff = newFabcon - oldFabcon;
-
-            if(tx.getBleachQty() != null){
-                oldBleach= tx.getBleachQty();
-            }else{oldBleach= 0;
-            }
-            
-            if(updatedTx.getBleachQty() != null){newBleach= updatedTx.getBleachQty();}else{newBleach=0;}
-            
-             bleachDiff = newBleach - oldBleach;
-
-            // adjust stock (if the user add or delete)
-            inventoryService.adjustAddonStock("Detergent", detergentDiff);
-            inventoryService.adjustAddonStock("Fabcon", fabconDiff);
-            inventoryService.adjustAddonStock("Bleach", bleachDiff);
-            System.out.println("changes");
-            
-            tx.setCustomerName(updatedTx.getCustomerName());
-            tx.setPhoneNumber(updatedTx.getPhoneNumber());
-            tx.setWeight(updatedTx.getWeight());
-            tx.setServiceMode(updatedTx.getServiceMode());
-            tx.setEstimatedTime(updatedTx.getEstimatedTime()); 
-            tx.setBleachQty(updatedTx.getBleachQty());
-            tx.setDetergentQty(updatedTx.getDetergentQty());
-            tx.setFabconQty(updatedTx.getFabconQty());
-            tx.setTotalAmount(updatedTx.getTotalAmount());
-            tx.setDeliveryAddress(updatedTx.getDeliveryAddress());
-            tx.setAdressDescription(updatedTx.getAdressDescription());
-            
-            transactionService.saveTransaction(tx);
-        }
+      transactionService.updateTransaction_AdjustStock(id, updatedTx);
+        
         return "redirect:/";
+        
     }
    
     @PostMapping("/transaction/create")

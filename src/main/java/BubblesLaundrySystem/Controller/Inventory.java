@@ -42,13 +42,36 @@ public class Inventory {
         }else if(item.getItemName().toLowerCase().contains("bleach")){
             return item.getQuantity() < bleachLimit;
         }
-        return item.getQuantity() < 10; // default fallback or return to  0
+        return item.getQuantity() < 10; 
         
         }).count();
 
-    int totalDetergent = transactions.stream().mapToInt(t -> t.getDetergentQty() != null ? t.getDetergentQty() : 0).sum();
-    int totalFabcon = transactions.stream().mapToInt(t -> t.getFabconQty() != null ? t.getFabconQty() : 0).sum();
-    int totalBleach = transactions.stream().mapToInt(t -> t.getBleachQty() != null ? t.getBleachQty() : 0).sum();
+        int totalDetergent = 0;
+        int totalFabcon = 0;
+        int totalBleach = 0;
+
+        for (Transaction t : transactions){
+   
+        if (t.getDetergentQty() != null) {
+        totalDetergent += t.getDetergentQty();
+         }else{
+        totalDetergent += 0; 
+    }
+
+   
+        if (t.getFabconQty() != null){
+        totalFabcon += t.getFabconQty();
+       }else{
+        totalFabcon += 0; 
+       }
+
+    
+       if (t.getBleachQty() != null) {
+        totalBleach += t.getBleachQty();
+       }else{
+        totalBleach += 0; 
+       }
+     }
     int totalUsageCount = totalDetergent + totalFabcon + totalBleach;
     
     // model attributes
