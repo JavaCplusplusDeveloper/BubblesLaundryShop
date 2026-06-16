@@ -11,7 +11,8 @@ import org.springframework.stereotype.Service;
 public class InventoryItemsS {
      @Autowired
       private InventoryItemR inventoryItemRepository;
-      public List <InventoryItem>getAllItems(){
+      
+     public List <InventoryItem>getAllItems(){
       return inventoryItemRepository.findAll();
     }
       public InventoryItem saveItem(InventoryItem item){

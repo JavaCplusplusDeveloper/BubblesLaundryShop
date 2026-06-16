@@ -25,9 +25,7 @@ public class InventoryItem {
 
     
     
-    public void setLastRestocked(LocalDateTime lastRestocked) {
-      this.lastRestocked = lastRestocked;
-    }
+
     public int getStockPercentage(){
       if (this.quantity==null|| this.quantity ==0 ){return 0;}
             
@@ -35,9 +33,7 @@ public class InventoryItem {
       return (int) Math.round(((double)this.quantity/maxQuantity)*100);
 }
     
-    public LocalDateTime getLastRestocked() {
-      return lastRestocked;
-    }
+  
 
  
    
