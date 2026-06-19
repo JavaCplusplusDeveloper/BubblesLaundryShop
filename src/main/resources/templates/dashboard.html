@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link rel="stylesheet" href="style.css" type="text/css"/>
+    
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -59,7 +59,7 @@
         }
         .nav-btn-alt {
             background-color: #d1e4ff;
-            color: #003da8;
+            color: #003ca3;
             border: none;
             padding: 12px 20px;
             border-radius: 12px;
@@ -68,7 +68,19 @@
             text-align: center;
             cursor: pointer;
             text-decoration: none;
+            transition: background-color 0.15s ease, color 0.2s ease;
         }
+        
+        .nav-btn-alt:hover{
+            background-color: #003ca3;
+            color: #d1e4ff;
+        }
+
+        .nav-btn-alt:hover{
+            opacity: 0.9;
+
+        }
+       
 
         /* --- MAIN SCROLLABLE CONTENT --- */
         .main-content {
@@ -101,6 +113,12 @@
             border-radius: 10px;
             font-weight: bold;
             cursor: pointer;
+            transition: background-color 0.10s ease, color 0.10s ease;
+        }
+
+        .new-order-btn:hover {
+            background-color: #66a3ff;
+            color: #0044b3;
         }
 
         /* Top Summary Counter Cards */
@@ -116,7 +134,7 @@
             border: 1px solid rgba(255,255,255,0.3);
             border-radius: 12px;
             padding: 15px 20px;
-            color: #001a4d;
+            color: #0e2b66;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -175,40 +193,32 @@
         .card-badge-container {
             margin: 2px 0;
         }
-        .service-badge {
-            background-color: #ffb3cc;
-            color: #b30047;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: bold;
-            display: inline-block;
-        }
+       
         
         /* --- HORIZONTAL ROW HIGHLIGHTER --- */
         .card-details {
-            display: flex;
-            flex-direction: row;
-            gap: 8px;
-            margin: 12px 0;
-            width: 100%;
+           display: flex; 
+           gap: 8px; 
+           margin: 15px 0; 
+           justify-content: flex-start; 
+           align-items: center; 
+           width: 100%;
         }
+
         .detail-highlight {
-            background-color: rgba(255, 255, 255, 0.35);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 8px 4px;
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            flex: 1;
-            font-size: 12px;
-            font-weight: bold;
-            color: #002266;
-            text-align: center;
-            min-width: 0;
+          flex: 1; 
+          display: flex; 
+          flex-direction: column; 
+          align-items: center; 
+          justify-content: center; 
+          background: #f7fafc; 
+          border: 1px solid #e2e8f0; 
+          padding: 8px; 
+          border-radius: 12px; 
+          min-width: 65px; 
+          text-align: center;
         }
+
         .detail-icon {
             font-size: 18px;
             margin-bottom: 4px;
@@ -249,9 +259,40 @@
             text-decoration: none;
             display: block;
         }
-        .btn-advance { background-color: #0052cc; color: white; }
-        .btn-advance-done { background-color: #3bc79b; color: white; }
-        .btn-cancel-order { background-color: #ffffff; color: #1e62ff; border: 1px solid #ffffff; }
+        .btn-advance {
+             background-color: 
+             #0052cc; color: 
+             white; 
+             transition: background-color 0.16s ease;
+            
+            }
+
+        .btn-advance:hover {
+            background-color: #003ca3;
+        }
+        .btn-advance:active {
+            opacity: 0.69;
+        }
+
+        .btn-advance-done {
+             background-color: 
+             #219ec4; color: 
+             white; 
+             transition: background-color 0.16s ease;
+            }
+       .btn-advance-done:hover {
+            background-color: #1986aa;
+        }
+
+        .btn-cancel-order { 
+            background-color: #ffffff; 
+            color: #1e62ff; 
+            border: 1px solid #ffffff; 
+            transition: background-color 0.16s ease;
+        }
+        .btn-cancel-order:hover {
+            background-color: #f0f0f0;
+        }
 
         /* --- MULTI-STEP MODAL CSS --- */
         .modal-overlay {
@@ -277,18 +318,7 @@
             position: relative;
             color: #333;
         }
-        .close-x {
-            position: absolute;
-            top: 20px;
-            right: 25px;
-            font-size: 28px;
-            color: #a0aec0;
-            cursor: pointer;
-            transition: color 0.2s ease;
-        }
-        .close-x:hover {
-            color: #4a5568;
-        }
+     
         .form-step {
             display: none;
         }
@@ -450,8 +480,28 @@
             cursor: pointer;
             border: none;
         }
-        .btn-cancel, .btn-back { background: #e2e8f0; color: #4a5568; }
-        .btn-next, .btn-submit { background: #0052cc; color: white; }
+        .btn-cancel, .btn-back { 
+             background-color: rgb(46, 138, 166); 
+             color: #ffffff; 
+             
+        }
+        
+        .btt-cancel:hover, .btn-back:hover {
+          opacity: 0.1s;
+        }
+        
+        
+        
+        .btn-next, .btn-submit {
+             background: #0052cc; 
+             color: white; 
+             transition: background-color 0.16s ease;
+            }
+        .btn-next:hover, .btn-submit:hover {
+            background-color: #003ca3;
+            }
+         
+
      
     </style>
 </head>
@@ -515,19 +565,19 @@
                         <div class="card-customer" th:text="${transaction.customerName}">Customer Name</div>
                         
                         <div class="card-badge-container">
-                            <span class="service-badge">Wash-Dry-Fold</span>
+                           
                         </div>
                         
                         <div class="card-details" style="display: flex; gap: 8px; margin: 15px 0; justify-content: flex-start; align-items: center; width: 100%;">
-                            <div class="detail-highlight" style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f7fafc; border: 1px solid #e2e8f0; padding: 8px; border-radius: 12px; min-width: 65px; text-align: center;">
+                            <div class="detail-highlight" >
                                 <span style="font-size: 16px; margin-bottom: 2px;">🧺</span> 
                                 <span style="font-size: 12px; color: #4a5568; font-weight: 500;" th:text="${#numbers.formatDecimal(transaction.weight, 0, 0)} + ' Load'">1 Load</span>
                             </div>
-                            <div class="detail-highlight" style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f7fafc; border: 1px solid #e2e8f0; padding: 8px; border-radius: 12px; min-width: 65px; text-align: center;">
+                            <div class="detail-highlight">
                                 <span style="font-size: 16px; margin-bottom: 2px;" th:text="${transaction.serviceMode == 'Delivery' ? '🚗' : '🏪'}">🏪</span> 
                                 <span style="font-size: 12px; color: #4a5568; font-weight: 500;" th:text="${transaction.serviceMode}">Pick-up</span>
                             </div>
-                            <div class="detail-highlight" style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f7fafc; border: 1px solid #e2e8f0; padding: 8px; border-radius: 12px; min-width: 65px; text-align: center;">
+                            <div class="detail-highlight">
                                 <span style="font-size: 16px; margin-bottom: 2px;">🕒</span> 
                                 <span style="font-size: 12px; color: #4a5568; font-weight: 500;" th:text="${transaction.estimatedTime ?: '3:00 pm'}">3:00 pm</span>
                             </div>
@@ -582,19 +632,19 @@
                         <div class="card-customer" th:text="${transaction.customerName}">Customer Name</div>
                         
                         <div class="card-badge-container">
-                            <span class="service-badge">Wash-Dry-Fold</span>
+                           
                         </div>
                         
-                        <div class="card-details" style="display: flex; gap: 8px; margin: 15px 0; justify-content: flex-start; align-items: center; width: 100%;">
-                            <div class="detail-highlight" style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f7fafc; border: 1px solid #e2e8f0; padding: 8px; border-radius: 12px; min-width: 65px; text-align: center;">
+                        <div class="card-details">
+                            <div class="detail-highlight">
                                 <span style="font-size: 16px; margin-bottom: 2px;">🧺</span> 
                                 <span style="font-size: 12px; color: #4a5568; font-weight: 500;" th:text="${#numbers.formatDecimal(transaction.weight, 0, 0)} + ' Load'">1 Load</span>
                             </div>
-                            <div class="detail-highlight" style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f7fafc; border: 1px solid #e2e8f0; padding: 8px; border-radius: 12px; min-width: 65px; text-align: center;">
+                            <div class="detail-highlight" >
                                 <span style="font-size: 16px; margin-bottom: 2px;" th:text="${transaction.serviceMode == 'Delivery' ? '🚗' : '🏪'}">🏪</span> 
                                 <span style="font-size: 12px; color: #4a5568; font-weight: 500;" th:text="${transaction.serviceMode}">Pick-up</span>
                             </div>
-                            <div class="detail-highlight" style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f7fafc; border: 1px solid #e2e8f0; padding: 8px; border-radius: 12px; min-width: 65px; text-align: center;">
+                            <div class="detail-highlight" >
                                 <span style="font-size: 16px; margin-bottom: 2px;">🕒</span> 
                                 <span style="font-size: 12px; color: #4a5568; font-weight: 500;" th:text="${transaction.estimatedTime ?: '3:00 pm'}">3:00 pm</span>
                             </div>
@@ -649,19 +699,19 @@
                         <div class="card-customer" th:text="${transaction.customerName}">Customer Name</div>
                         
                         <div class="card-badge-container">
-                            <span class="service-badge">Wash-Dry-Fold</span>
+                         
                         </div>
                         
-                        <div class="card-details" style="display: flex; gap: 8px; margin: 15px 0; justify-content: flex-start; align-items: center; width: 100%;">
-                            <div class="detail-highlight" style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f7fafc; border: 1px solid #e2e8f0; padding: 8px; border-radius: 12px; min-width: 65px; text-align: center;">
+                        <div class="card-details">
+                            <div class="detail-highlight" >
                                 <span style="font-size: 16px; margin-bottom: 2px;">🧺</span> 
                                 <span style="font-size: 12px; color: #4a5568; font-weight: 500;" th:text="${#numbers.formatDecimal(transaction.weight, 0, 0)} + ' Load'">1 Load</span>
                             </div>
-                            <div class="detail-highlight" style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f7fafc; border: 1px solid #e2e8f0; padding: 8px; border-radius: 12px; min-width: 65px; text-align: center;">
+                            <div class="detail-highlight" >
                                 <span style="font-size: 16px; margin-bottom: 2px;" th:text="${transaction.serviceMode == 'Delivery' ? '🚗' : '🏪'}">🏪</span> 
                                 <span style="font-size: 12px; color: #4a5568; font-weight: 500;" th:text="${transaction.serviceMode}">Pick-up</span>
                             </div>
-                            <div class="detail-highlight" style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f7fafc; border: 1px solid #e2e8f0; padding: 8px; border-radius: 12px; min-width: 65px; text-align: center;">
+                            <div class="detail-highlight" >
                                 <span style="font-size: 16px; margin-bottom: 2px;">🕒</span> 
                                 <span style="font-size: 12px; color: #4a5568; font-weight: 500;" th:text="${transaction.estimatedTime ?: '3:00 pm'}">3:00 pm</span>
                             </div>
@@ -693,7 +743,7 @@
 
     <div id="orderModal" class="modal-overlay" style="display: none;">
         <div class="modal-content">
-            <span id="closeModalBtn" class="close-x">&times;</span>
+            <span id="closeModalBtn">&times;</span>
 
             <form th:action="@{/transaction/create}" method="POST" id="multiStepForm">
                 
@@ -850,7 +900,7 @@
 
     <div id="editOrderModal" class="modal-overlay" style="display: none;">
         <div class="modal-content" style="width: 380px;">
-            <span id="closeEditModalBtn" class="close-x">&times;</span>
+            <span id="closeEditModalBtn" >&times;</span>
             <h2 style="color: #2d3748; margin-top: 0;">Edit Order Details</h2>
             
             <form id="editForm" method="POST">
