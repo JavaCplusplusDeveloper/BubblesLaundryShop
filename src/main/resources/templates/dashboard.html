@@ -1,512 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    
+     
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bubbles Laundry Shop Order Queue</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(180deg, #1e62ff 0%, #4da3ff 100%);
-            min-height: 100vh;
-            display: flex;
-            color: #333;
-            overflow-x: hidden;
-        }
-
-        /* Container Layout */
-        .app-container {
-            display: flex;
-            width: 100vw;
-            min-height: 100vh;
-        }
-
-        /* --- SIDEBAR PANEL --- */
-        .sidebar {
-            width: 260px;
-            background-color: #0052cc;
-            padding: 30px 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            box-shadow: 4px 0 10px rgba(0,0,0,0.15);
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: 0;
-        }
-        .brand-name {
-            color: white;
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 30px;
-            padding-left: 10px;
-        }
-        .nav-btn {
-            background-color: #79b0ff;
-            color: #002b80;
-            border: none;
-            padding: 14px 20px;
-            border-radius: 30px;
-            font-size: 16px;
-            font-weight: bold;
-            text-align: left;
-            cursor: pointer;
-        }
-        .nav-btn-alt {
-            background-color: #d1e4ff;
-            color: #003ca3;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            text-align: center;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background-color 0.15s ease, color 0.2s ease;
-        }
-        
-        .nav-btn-alt:hover{
-            background-color: #003ca3;
-            color: #d1e4ff;
-        }
-
-        .nav-btn-alt:hover{
-            opacity: 0.9;
-
-        }
-       
-
-        /* --- MAIN SCROLLABLE CONTENT --- */
-        .main-content {
-            margin-left: 300px;
-            flex-grow: 1;
-            padding: 30px;
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-
-        /* Header Layout */
-        .main-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: white;
-            padding-right: 20px;
-        }
-        .main-header h1 {
-            margin: 0;
-            font-size: 36px;
-            font-weight: bold;
-        }
-        .new-order-btn {
-            background-color: #0044b3;
-            color: white;
-            border: 2px solid #66a3ff;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.10s ease, color 0.10s ease;
-        }
-
-        .new-order-btn:hover {
-            background-color: #66a3ff;
-            color: #0044b3;
-        }
-
-        /* Top Summary Counter Cards */
-        .status-summary-bar {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            padding-right: 20px;
-        }
-        .summary-box {
-            background-color: rgba(115, 185, 255, 0.6);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,255,255,0.3);
-            border-radius: 12px;
-            padding: 15px 20px;
-            color: #0e2b66;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .summary-box .title {
-            font-weight: bold;
-            font-size: 14px;
-        }
-        .summary-box .count {
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        /* --- CONTINUOUS SCROLL PANELS --- */
-        .queue-section {
-            border-top: 2px solid rgba(255, 255, 255, 0.2);
-            padding-top: 20px;
-            padding-right: 20px;
-        }
-        .section-heading {
-            color: white;
-            font-size: 26px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-        .orders-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-            gap: 25px;
-        }
-
-        /* --- CARD OBJECT STYLES --- */
-        .order-card {
-            background-color: #6daeff;
-            border: 1px solid #99c2ff;
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-            color: #001a4d;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            position: relative;
-        }
-        .card-number {
-            font-size: 16px;
-            font-weight: bold;
-            opacity: 0.8;
-            margin: 0;
-        }
-        .card-customer {
-            font-size: 22px;
-            font-weight: bold;
-            margin: 2px 0 0 0;
-        }
-        .card-badge-container {
-            margin: 2px 0;
-        }
-       
-        
-        /* --- HORIZONTAL ROW HIGHLIGHTER --- */
-        .card-details {
-           display: flex; 
-           gap: 8px; 
-           margin: 15px 0; 
-           justify-content: flex-start; 
-           align-items: center; 
-           width: 100%;
-        }
-
-        .detail-highlight {
-          flex: 1; 
-          display: flex; 
-          flex-direction: column; 
-          align-items: center; 
-          justify-content: center; 
-          background: #f7fafc; 
-          border: 1px solid #e2e8f0; 
-          padding: 8px; 
-          border-radius: 12px; 
-          min-width: 65px; 
-          text-align: center;
-        }
-
-        .detail-icon {
-            font-size: 18px;
-            margin-bottom: 4px;
-            display: inline-block;
-        }
-
-        .card-total-label {
-            margin: 8px 0 2px 0;
-            font-size: 13px;
-            font-weight: bold;
-            opacity: 0.8;
-        }
-        .card-total-price {
-            font-size: 24px;
-            font-weight: 800;
-            margin: 0 0 10px 0;
-        }
-        
-        /* CARD ACTION BUTTONS */
-        .card-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-top: auto;
-            border-top: 1px solid rgba(0, 43, 128, 0.15);
-            padding-top: 12px;
-        }
-        .btn-card-action {
-            width: 100%;
-            padding: 10px 12px;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 14px;
-            cursor: pointer;
-            text-align: center;
-            box-sizing: border-box;
-            text-decoration: none;
-            display: block;
-        }
-        .btn-advance {
-             background-color: 
-             #0052cc; color: 
-             white; 
-             transition: background-color 0.16s ease;
-            
-            }
-
-        .btn-advance:hover {
-            background-color: #003ca3;
-        }
-        .btn-advance:active {
-            opacity: 0.69;
-        }
-
-        .btn-advance-done {
-             background-color: 
-             #219ec4; color: 
-             white; 
-             transition: background-color 0.16s ease;
-            }
-       .btn-advance-done:hover {
-            background-color: #1986aa;
-        }
-
-        .btn-cancel-order { 
-            background-color: #ffffff; 
-            color: #1e62ff; 
-            border: 1px solid #ffffff; 
-            transition: background-color 0.16s ease;
-        }
-        .btn-cancel-order:hover {
-            background-color: #f0f0f0;
-        }
-
-        /* --- MULTI-STEP MODAL CSS --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(4px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-        .modal-content {
-            background: #ffffff;
-            width: 650px;
-            max-width: 90%;
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            position: relative;
-            color: #333;
-        }
-     
-        .form-step {
-            display: none;
-        }
-        .form-step.step-active {
-            display: block;
-        }
-        .step-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-        .step-header h2 {
-            font-size: 22px;
-            color: #2d3748;
-            margin: 0;
-        }
-        .step-indicator {
-            font-size: 14px;
-            color: #718096;
-        }
-        .progress-bar {
-            width: 100%;
-            height: 6px;
-            background: #edf2f7;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            overflow: hidden;
-        }
-        .progress {
-            height: 100%;
-            background: #0052cc;
-            transition: width 0.3s ease;
-        }
-        .field-label {
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #4a5568;
-        }
-        .quantity-control {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin: 20px 0;
-        }
-        .counter-btn {
-            width: 45px;
-            height: 45px;
-            border: 1px solid #cbd5e0;
-            background: #ffffff;
-            font-size: 20px;
-            font-weight: bold;
-            border-radius: 50%;
-            cursor: pointer;
-            color: #4a5568;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .quantity-control input {
-            width: 60px;
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            border: none;
-            background: transparent;
-            color: #2d3748;
-        }
-        .price-preview-box {
-            background: #f7fafc;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-        }
-        .addons-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-        .addon-card {
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 15px;
-            text-align: center;
-        }
-        .addon-card.detergent { background: #ebf8ff; }
-        .addon-card.fabcon { background: #fff5f7; }
-        .addon-card.bleach { background: #faf5ff; }
-        
-        .quantity-control.small .counter-btn { width: 32px; height: 32px; font-size: 14px; }
-        .quantity-control.small input { font-size: 16px; width: 35px; }
-
-        .delivery-selection {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin: 30px 0;
-        }
-        .method-card {
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 20px;
-            width: 140px;
-            text-align: center;
-            cursor: pointer;
-            background: #ffffff;
-        }
-        .method-card.active {
-            border-color: #0052cc;
-            background: #ebf8ff;
-            font-weight: bold;
-        }
-        .split-finalize {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            margin-bottom: 20px;
-        }
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #cbd5e0;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            box-sizing: border-box;
-        }
-        .order-summary-box {
-            background: #f7fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 15px;
-        }
-        .summary-line {
-            display: flex;
-            justify-content: space-between;
-            font-size: 13px;
-            margin-bottom: 8px;
-        }
-        .summary-total {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-        .wizard-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-            margin-top: 25px;
-            border-top: 1px solid #edf2f7;
-            padding-top: 20px;
-        }
-        .wizard-footer button {
-            padding: 10px 24px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-        }
-        .btn-cancel, .btn-back { 
-             background-color: rgb(46, 138, 166); 
-             color: #ffffff; 
-             
-        }
-        
-        .btt-cancel:hover, .btn-back:hover {
-          opacity: 0.1s;
-        }
-        
-        
-        
-        .btn-next, .btn-submit {
-             background: #0052cc; 
-             color: white; 
-             transition: background-color 0.16s ease;
-            }
-        .btn-next:hover, .btn-submit:hover {
-            background-color: #003ca3;
-            }
-         
-
-     
-    </style>
+    <link rel="stylesheet" href="/styles/dashboard.css">
+   
 </head>
 <body>
-
+   <script th:src="@{/script/dashboard.js}"></script>
     <div class="app-container">
         <div class="sidebar">
             <div class="brand-name">Bubbles Mini Store</div>
@@ -515,7 +19,7 @@
             <a href="/history" class="nav-btn-alt">History</a>
             <a href="/settings" class="nav-btn-alt">Settings</a>
             <div style ="text-align: center;">
-                <img source="/images/download.jpg" style="margin-top:100px;" height="200" width="200" >
+            <img source="/images/download.jpg" style="margin-top:100px;" height="200" width="200" >
             </div>
         </div>
 
@@ -530,10 +34,12 @@
                     <span class="title">Pending</span>
                     <span class="count" th:text="${pendingCount ?: 0}">0</span>
                 </div>
+
                 <div class="summary-box">
                     <span class="title">Washing</span>
                     <span class="count" th:text="${washingCount ?: 0}">0</span>
                 </div>
+                
                 <div class="summary-box">
                     <span class="title">Done</span>
                     <span class="count" th:text="${doneCount ?: 0}">0</span>
@@ -544,10 +50,10 @@
                 <div class="section-heading">Pending Orders</div>
                 <div class="orders-grid">
                     <div class="order-card" th:each="transaction : ${pendingTransactions}">
-                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                        <div class="card-head">
                             <div class="card-number" th:text="'#' + ${transaction.id}">#1</div>
-                            <div class="card-action-icons" style="display: flex; gap: 12px; font-size: 14px; align-items: center;">
-                                <span style="cursor: pointer; margin-right: 4px;" 
+                            <div class="card-action-icons">
+                                <span style="margin-right: 4px;" 
                                       th:data-id="${transaction.id}"
                                       th:data-name="${transaction.customerName}"
                                       th:data-weight="${transaction.weight}"
@@ -558,7 +64,7 @@
                                       th:data-bleach="${transaction.bleachQty ?: 0}"
                                       onclick="triggerEditModal(this)">✏️</span>
                                 <span th:onclick="'event.stopPropagation(); openDeleteModal(' + ${transaction.id} + ')'" 
-                                      style="text-decoration: none; color: #ff4d4d; cursor: pointer; font-weight: bold; font-size: 16px;">✕</span>
+                                      class="card-remove">✕</span>
                             </div>
                         </div>
                         
@@ -568,10 +74,10 @@
                            
                         </div>
                         
-                        <div class="card-details" style="display: flex; gap: 8px; margin: 15px 0; justify-content: flex-start; align-items: center; width: 100%;">
+                        <div class="card-details">
                             <div class="detail-highlight" >
                                 <span style="font-size: 16px; margin-bottom: 2px;">🧺</span> 
-                                <span style="font-size: 12px; color: #4a5568; font-weight: 500;" th:text="${#numbers.formatDecimal(transaction.weight, 0, 0)} + ' Load'">1 Load</span>
+                                <span class="number-load" th:text="${#numbers.formatDecimal(transaction.weight, 0, 0)} + ' Load'">1 Load</span>
                             </div>
                             <div class="detail-highlight">
                                 <span style="font-size: 16px; margin-bottom: 2px;" th:text="${transaction.serviceMode == 'Delivery' ? '🚗' : '🏪'}">🏪</span> 
@@ -579,12 +85,12 @@
                             </div>
                             <div class="detail-highlight">
                                 <span style="font-size: 16px; margin-bottom: 2px;">🕒</span> 
-                                <span style="font-size: 12px; color: #4a5568; font-weight: 500;" th:text="${transaction.estimatedTime ?: '3:00 pm'}">3:00 pm</span>
+                                <span class="time" th:text="${transaction.estimatedTime ?: '3:00 pm'}">3:00 pm</span>
                             </div>
                         </div>
 
-                         <div class="card-addons-summary" style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 15px; width: 100%; padding-top: 8px; border-top: 1px dashed #e2e8f0;">
-                            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: white; font-weight: 700; margin-bottom: 2px;">Addons Used:</div>
+                         <div class="card-addons-summary" >
+                            <div class="addons-used-header">Addons Used:</div>
                             <div style="display: flex; justify-content: space-between; font-size: 13px; color: white;">
                                 <span>🧼 Detergent</span> <strong th:text="'x' + ${transaction.detergentQty ?: 0}">x0</strong>
                             </div>
@@ -601,7 +107,7 @@
                         
                         <div class="card-actions">
                             <a th:href="@{/transaction/start/{id}(id=${transaction.id})}" class="btn-card-action btn-advance">Start Wash</a>
-                            <button type="button" class="btn-card-action btn-cancel-order">View Receipt</button>
+                            <button type="button" class="btn-card-action btn-view-receipt">View Receipt</button>
                         </div>
                     </div>
                 </div>
@@ -613,7 +119,7 @@
                     <div class="order-card" th:each="transaction : ${washingTransactions}">
                         <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
                             <div class="card-number" th:text="'#' + ${transaction.id}">#3</div>
-                            <div class="card-action-icons; font-size: 14px; align-items: center;">
+                            <div class="card-action-icons;">
                                 <span style="cursor: pointer; margin-right: 4px;" 
                                       th:data-id="${transaction.id}"
                                       th:data-name="${transaction.customerName}"
@@ -625,7 +131,7 @@
                                       th:data-bleach="${transaction.bleachQty ?: 0}"
                                       onclick="triggerEditModal(this)">✏️</span>
                                 <span th:onclick="'event.stopPropagation(); openDeleteModal(' + ${transaction.id} + ')'" 
-                                      style="text-decoration: none; color: #ff4d4d; cursor: pointer; font-weight: bold; font-size: 16px;">✕</span>
+                                      class="card-remove">✕</span>
                             </div>
                         </div>
                         
@@ -638,20 +144,22 @@
                         <div class="card-details">
                             <div class="detail-highlight">
                                 <span style="font-size: 16px; margin-bottom: 2px;">🧺</span> 
-                                <span style="font-size: 12px; color: #4a5568; font-weight: 500;" th:text="${#numbers.formatDecimal(transaction.weight, 0, 0)} + ' Load'">1 Load</span>
+                                <span class="number-load" th:text="${#numbers.formatDecimal(transaction.weight, 0, 0)} + ' Load'">1 Load</span>
                             </div>
+
                             <div class="detail-highlight" >
                                 <span style="font-size: 16px; margin-bottom: 2px;" th:text="${transaction.serviceMode == 'Delivery' ? '🚗' : '🏪'}">🏪</span> 
                                 <span style="font-size: 12px; color: #4a5568; font-weight: 500;" th:text="${transaction.serviceMode}">Pick-up</span>
                             </div>
+                            
                             <div class="detail-highlight" >
                                 <span style="font-size: 16px; margin-bottom: 2px;">🕒</span> 
-                                <span style="font-size: 12px; color: #4a5568; font-weight: 500;" th:text="${transaction.estimatedTime ?: '3:00 pm'}">3:00 pm</span>
+                                <span class="time" th:text="${transaction.estimatedTime ?: '3:00 pm'}">3:00 pm</span>
                             </div>
                         </div>
 
                          <div class="card-addons-summary" style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 15px; width: 100%; padding-top: 8px; border-top: 1px dashed #e2e8f0;">
-                            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: white; font-weight: 700; margin-bottom: 2px;">Addons Used:</div>
+                            <div class="addon-used-header">Addons Used:</div>
                             <div style="display: flex; justify-content: space-between; font-size: 13px; color: white;">
                                 <span>🧼 Detergent</span> <strong th:text="'x' + ${transaction.detergentQty ?: 0}">x0</strong>
                             </div>
@@ -668,7 +176,7 @@
                         
                         <div class="card-actions">
                             <a th:href="@{/transaction/done/{id}(id=${transaction.id})}" class="btn-card-action btn-advance-done">Mark as Done</a>
-                            <button type="button" class="btn-card-action btn-cancel-order">View Receipt</button>
+                            <button type="button" class="btn-card-action btn-view-receipt">View Receipt</button>
                         </div>
                     </div>
                 </div>
@@ -678,10 +186,10 @@
                 <div class="section-heading">Done Orders</div>
                 <div class="orders-grid">
                     <div class="order-card" th:each="transaction : ${doneTransactions}">
-                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                        <div class="card-head">
                             <div class="card-number" th:text="'#' + ${transaction.id}">#1</div>
-                            <div class="card-action-icons" style="display: flex; gap: 12px; font-size: 14px; align-items: center;">
-                                <span style="cursor: pointer; margin-right: 4px;" 
+                            <div class="card-action-icons">
+                                <span style="margin-right: 4px;" 
                                       th:data-id="${transaction.id}"
                                       th:data-name="${transaction.customerName}"
                                       th:data-weight="${transaction.weight}"
@@ -692,7 +200,7 @@
                                       th:data-bleach="${transaction.bleachQty ?: 0}"
                                       onclick="triggerEditModal(this)">✏️</span>
                                 <span th:onclick="'event.stopPropagation(); openDeleteModal(' + ${transaction.id} + ')'" 
-                                      style="text-decoration: none; color: #ff4d4d; cursor: pointer; font-weight: bold; font-size: 16px;">✕</span>
+                                      class="card-remove">✕</span>
                             </div>
                         </div>
                         
@@ -705,7 +213,7 @@
                         <div class="card-details">
                             <div class="detail-highlight" >
                                 <span style="font-size: 16px; margin-bottom: 2px;">🧺</span> 
-                                <span style="font-size: 12px; color: #4a5568; font-weight: 500;" th:text="${#numbers.formatDecimal(transaction.weight, 0, 0)} + ' Load'">1 Load</span>
+                                <span class="number-load" th:text="${#numbers.formatDecimal(transaction.weight, 0, 0)} + ' Load'">1 Load</span>
                             </div>
                             <div class="detail-highlight" >
                                 <span style="font-size: 16px; margin-bottom: 2px;" th:text="${transaction.serviceMode == 'Delivery' ? '🚗' : '🏪'}">🏪</span> 
@@ -713,12 +221,12 @@
                             </div>
                             <div class="detail-highlight" >
                                 <span style="font-size: 16px; margin-bottom: 2px;">🕒</span> 
-                                <span style="font-size: 12px; color: #4a5568; font-weight: 500;" th:text="${transaction.estimatedTime ?: '3:00 pm'}">3:00 pm</span>
+                                <span class="time" th:text="${transaction.estimatedTime ?: '3:00 pm'}">3:00 pm</span>
                             </div>
                         </div>
 
                         <div class="card-addons-summary" style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 15px; width: 100%; padding-top: 8px; border-top: 1px dashed #e2e8f0;">
-                            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: white; font-weight: 700; margin-bottom: 2px;">Addons Used:</div>
+                            <div class="addons-used-header">Addons Used:</div>
                             <div style="display: flex; justify-content: space-between; font-size: 13px; color: white;">
                                 <span>🧼 Detergent</span> <strong th:text="'x' + ${transaction.detergentQty ?: 0}">x0</strong>
                             </div>
@@ -735,15 +243,15 @@
                         
                         <div class="card-actions">
                             <button type="button" class="btn-card-action btn-advance">Archive</button>
-                            <button type="button" class="btn-card-action btn-cancel-order">View Receipt</button>
+                            <button type="button" class="btn-card-action btn-view-receipt">View Receipt</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-    <div id="orderModal" class="modal-overlay" style="display: none;">
+    <div id="orderModal" class="modal-overlay">
         <div class="modal-content">
-            <span id="closeModalBtn">&times;</span>
+            <span id="closeModalBtn"></span>
 
             <form th:action="@{/transaction/create}" method="POST" id="multiStepForm">
                 
@@ -755,14 +263,17 @@
                     <div class="progress-bar"><div class="progress" style="width: 25%;"></div></div>
                     <p class="field-label">Select Number of Loads</p>
                     <div class="wizard-body load-step">
+                        
                         <div class="quantity-control">
                             <button type="button" class="counter-btn" onclick="decrement('weight', 1)">-</button>
                             <input type="number" id="weight" name="weight" value="1" readonly />
                             <button type="button" class="counter-btn" onclick="increment('weight', 99)">+</button>
                         </div>
+
                         <div class="price-preview-box">
                             <div class="price-badge">Price: ₱ <span id="basePricePreview">125.00</span></div>
                         </div>
+
                     </div>
                     <div class="wizard-footer">
                         <button type="button" class="btn-cancel" id="cancelModalBtn">Cancel</button>
@@ -831,14 +342,14 @@
                <div id="deliveryAddressBlock" style="display: none;">
     <div class="form-group" style="margin-top: 15px;">
         <p class="field-label">Full Address</p>
-        <input type="text" id="deliveryAddress" name="deliveryAddress" placeholder="Enter street, barangay, city" style="width: 100%; padding: 10px 12px; border: 1px solid #cbd5e0; border-radius: 8px; transition: border-color 0.2s;" />
-        <span id="addressError" style="color: #ff4d4d; font-size: 13px; display: none; margin-top: 5px; font-weight: 500;">⚠ Please fill out full address</span>
+        <input type="text" id="deliveryAddress" name="deliveryAddress" placeholder="Enter street, barangay, city" class="full-address-holder" />
+        <span id="addressError" class="error-message">⚠ Please fill out full address</span>
     </div>
     
     <div class="form-group" style="margin-top: 15px;">
         <p class="field-label">Address Description / Landmarks</p>
-        <textarea id="addressDescription" name="addressDescription" placeholder="e.g., House with the blue gate, near the basketball court" rows="2" style="width: 100%; padding: 10px 12px; border: 1px solid #cbd5e0; border-radius: 8px; font-family: inherit; resize: none; transition: border-color 0.2s;"></textarea>
-        <span id="descError" style="color: #ff4d4d; font-size: 13px; display: none; margin-top: 5px; font-weight: 500;">⚠ Please fill out address description</span>
+        <textarea id="addressDescription" name="addressDescription" placeholder="e.g., House with the blue gate, near the basketball court" rows="2" class="address-description-holder"></textarea>
+        <span id="descError" class="error-message">⚠ Please fill out address description</span>
     </div>
 </div>
                     <div class="wizard-footer">
@@ -857,20 +368,21 @@
                      <div class="finalize-inputs">
     <div class="form-group">
         <p class="field-label">Customer Name</p>
-        <input type="text" id="customerName" name="customerName" placeholder="Customer name" style="width: 100%; padding: 10px 12px; border: 1px solid #cbd5e0; border-radius: 8px; transition: border-color 0.2s;" />
-        <span id="nameError" style="color: #ff4d4d; font-size: 13px; display: none; margin-top: 5px; font-weight: 500;">⚠ Please fill out customer name</span>
+        <input type="text" id="customerName" name="customerName" 
+        placeholder="Customer name" class="customer-name-holder" />
+        <span id="nameError" class="error-message">⚠ Please fill out customer name</span>
     </div>
     
     <div class="form-group" style="margin-top: 15px;">
         <p class="field-label">Phone Number</p>
-        <input type="text" id="phoneNumber" name="phoneNumber" placeholder="Phone Number" style="width: 100%; padding: 10px 12px; border: 1px solid #cbd5e0; border-radius: 8px; transition: border-color 0.2s;" />
-        <span id="phoneError" style="color: #ff4d4d; font-size: 13px; display: none; margin-top: 5px; font-weight: 500;">⚠ Please fill out phone number</span>
+        <input type="text" id="phoneNumber" name="phoneNumber" placeholder="Phone Number" class="phone-number-holder" />
+        <span id="phoneError" class="error-message">⚠ Please fill out phone number</span>
     </div>
     
     <div class="form-group" style="margin-top: 15px;">
         <p class="field-label">Target Time</p>
-        <input type="text" id="estimatedTime" name="estimatedTime" placeholder="Target Time (e.g., 3:00 pm)" style="width: 100%; padding: 10px 12px; border: 1px solid #cbd5e0; border-radius: 8px; transition: border-color 0.2s;" />
-        <span id="timeError" style="color: #ff4d4d; font-size: 13px; display: none; margin-top: 5px; font-weight: 500;">⚠ Please fill out target time</span>
+        <input type="text" id="estimatedTime" name="estimatedTime" placeholder="Target Time (e.g., 3:00 pm)" class="target-time-holder" />
+        <span id="timeError" class="error-message">⚠ Please fill out target time</span>
     </div>
     
     <div class="form-group" style="margin-top: 15px;">
@@ -900,7 +412,7 @@
 
     <div id="editOrderModal" class="modal-overlay" style="display: none;">
         <div class="modal-content" style="width: 380px;">
-            <span id="closeEditModalBtn" >&times;</span>
+            <span id="closeEditModalBtn" ></span>
             <h2 style="color: #2d3748; margin-top: 0;">Edit Order Details</h2>
             
             <form id="editForm" method="POST">
@@ -927,6 +439,7 @@
                             <button type="button" class="counter-btn" style="width:24px; height:24px;" onclick="incrementEditAddon('editAddonDetergent')">+</button>
                         </div>
                     </div>
+
                     <div class="addon-card fabcon" style="padding: 10px; font-size: 13px;">
                         <h4 style="margin: 0 0 5px 0;">Fabcon</h4>
                         <p style="margin: 0 0 8px 0;">₱10.00</p>
@@ -936,6 +449,7 @@
                             <button type="button" class="counter-btn" style="width:24px; height:24px;" onclick="incrementEditAddon('editAddonFabcon')">+</button>
                         </div>
                     </div>
+
                     <div class="addon-card bleach" style="padding: 10px; font-size: 13px;">
                         <h4 style="margin: 0 0 5px 0;">Bleach</h4>
                         <p style="margin: 0 0 8px 0;">₱15.00</p>
@@ -978,287 +492,19 @@
 
     <div id="deleteModal" class="modal-overlay" style="display: none;">
         <div class="modal-content" style="width: 400px; text-align: center; padding: 25px;">
-            <h2 style="color: #2d3748; margin-top: 0;">Confirm Delete</h2>
-            <p style="color: #4a5568; margin-bottom: 25px; font-size: 15px;">
-                Are you sure you want to permanently delete this order? This action cannot be undone.
+            <h2 class="confirm-delete-header">Confirm Delete</h2>
+            <p class="confirm-delete-details">
+                Are you sure you want to permanently delete this order? 
+                           This action cannot be undone.
             </p>
             <div style="display: flex; justify-content: center; gap: 15px;">
-                <button type="button" class="btn-cancel" id="closeDeleteModalBtn" style="padding: 10px 20px;">Cancel</button>
+                <button type="button" class="confirm-delete-cancel-btn" id="closeDeleteModalBtn">Cancel</button>
                 <a id="confirmDeleteLink" href="#" class="btn-card-action btn-advance" style="background-color: #ff4d4d; width: auto; padding: 10px 25px; margin: 0;">Yes, Delete</a>
             </div>
         </div>
     </div>
 
-    <script>
-        // Progress Engine Navigation
-        // Progress Engine Navigation
-     // Progress Engine Navigation with Clean Field Validation
-function nextStep(stepNumber) {
-    // If the user tries to click "Next" on Step 3 to reach Step 4
-    if (stepNumber === 4) {
-        let serviceMode = document.getElementById('serviceMode').value;
-        let addrInput = document.getElementById('deliveryAddress');
-        let descInput = document.getElementById('addressDescription');
-        let addrError = document.getElementById('addressError');
-        let descError = document.getElementById('descError');
-
-        // Reset previous red borders and warning labels
-        if (addrInput) addrInput.style.borderColor = "#cbd5e0";
-        if (descInput) descInput.style.borderColor = "#cbd5e0";
-        if (addrError) addrError.style.display = "none";
-        if (descError) descError.style.display = "none";
-
-        if (serviceMode === 'Delivery') {
-            let isValid = true;
-
-            // Validate Address field
-            if (!addrInput || !addrInput.value.trim()) {
-                if (addrInput) addrInput.style.borderColor = "#ff4d4d";
-                if (addrError) addrError.style.display = "block";
-                isValid = false;
-            }
-            
-            // Validate Description field
-            if (!descInput || !descInput.value.trim()) {
-                if (descInput) descInput.style.borderColor = "#ff4d4d";
-                if (descError) descError.style.display = "block";
-                isValid = false;
-            }
-
-            // Halt execution immediately if a delivery field is empty
-            if (!isValid) return;
-        }
-    }
-
-    // Standard step transition block (now correctly within scope)
-    document.querySelectorAll('.form-step').forEach(step => step.classList.remove('step-active'));
-    let targetStep = document.getElementById('step-' + stepNumber);
-    if (targetStep) targetStep.classList.add('step-active');
     
-    if (stepNumber === 4) { calculateGrandTotal(); }
-}
-
-// Delivery Card Selection Toggles
-function selectDeliveryMethod(method) {
-    document.getElementById('serviceMode').value = method;
-    document.getElementById('methodPickUp').classList.remove('active');
-    document.getElementById('methodDelivery').classList.remove('active');
-    
-    let addrInput = document.getElementById('deliveryAddress');
-    let descInput = document.getElementById('addressDescription');
-    let addrError = document.getElementById('addressError');
-    let descError = document.getElementById('descError');
-
-    if (method === 'Pick-up') {
-        document.getElementById('methodPickUp').classList.add('active');
-        document.getElementById('deliveryAddressBlock').style.display = "none";
-        
-        // Wipe values and warnings clear so Pick-up transactions process effortlessly
-        if (addrInput) { addrInput.value = ""; addrInput.style.borderColor = "#cbd5e0"; }
-        if (descInput) { descInput.value = ""; descInput.style.borderColor = "#cbd5e0"; }
-        if (addrError) addrError.style.display = "none";
-        if (descError) descError.style.display = "none";
-    } else {
-        document.getElementById('methodDelivery').classList.add('active');
-        document.getElementById('deliveryAddressBlock').style.display = "block";
-    }
-}
-
-        function prevStep(stepNumber) {
-            document.querySelectorAll('.form-step').forEach(step => step.classList.remove('step-active'));
-            document.getElementById('step-' + stepNumber).classList.add('step-active');
-        }
-
-        // Counter Increment System
-        function increment(inputId, max) {
-            let input = document.getElementById(inputId);
-            let val = parseInt(input.value);
-            if(val < max || max === 99) { input.value = val + 1; }
-            calculateGrandTotal();
-        }
-
-        // Counter Decrement System
-        function decrement(inputId, min) {
-            let input = document.getElementById(inputId);
-            let val = parseInt(input.value);
-            if(val > min) { input.value = val - 1; }
-            calculateGrandTotal();
-        }
-
-     
-
-        // Calculation Engine Engine
-        function calculateGrandTotal() {
-            let weightInput = document.getElementById('weight');
-            let weight = parseInt(weightInput.value) || 1;
-            let detergent = parseInt(document.getElementById('detergentQty').value) || 0;
-            let fabcon = parseInt(document.getElementById('fabconQty').value) || 0;
-            let bleach = parseInt(document.getElementById('bleachQty').value) || 0;
-            let isRush = document.getElementById('isRush').checked;
-
-            let baseLoadPrice = weight * 125.00;
-            let totalAddons = (detergent * 12) + (fabcon * 10) + (bleach * 15);
-            let finalGrandTotal = baseLoadPrice + totalAddons + (isRush ? 50.00 : 0.00);
-
-            document.getElementById('basePricePreview').innerText = baseLoadPrice.toFixed(2);
-            document.getElementById('sumLoadKg').innerText = weight;
-            document.getElementById('sumDetergentCount').innerText = detergent;
-            document.getElementById('sumFabconCount').innerText = fabcon;
-            document.getElementById('sumBleachCount').innerText = bleach;
-            document.getElementById('grandTotalDisplay').innerText = finalGrandTotal.toFixed(2);
-            document.getElementById('totalAmountInput').value = finalGrandTotal.toFixed(2);
-        }
-
-        // Window Bind Controls for New Order Modal
-        const modal = document.getElementById("orderModal");
-        document.getElementById("openModalBtn").onclick = function() { 
-            document.getElementById('weight').value = 1;
-            document.getElementById('detergentQty').value = 0;
-            document.getElementById('fabconQty').value = 0;
-            document.getElementById('bleachQty').value = 0;
-            document.getElementById('estimatedTime').value = "";
-            document.getElementById('isRush').checked = false;
-            calculateGrandTotal();
-            modal.style.display = "flex"; 
-            nextStep(1); 
-        };
-        document.getElementById("closeModalBtn").onclick = function() { modal.style.display = "none"; };
-        document.getElementById("cancelModalBtn").onclick = function() { modal.style.display = "none"; };
-        
-        // --- IN-PAGE EDIT MODAL ENGINE ---
-        const editModal = document.getElementById("editOrderModal");
-        const editForm = document.getElementById("editForm");
-
-        function triggerEditModal(element) {
-            let id = element.getAttribute('data-id');
-            let name = element.getAttribute('data-name');
-            let weight = element.getAttribute('data-weight');
-            let mode = element.getAttribute('data-mode');
-            let time = element.getAttribute('data-time') || '3:00 pm';
-            let detergent = element.getAttribute('data-detergent') || 0;
-            let fabcon = element.getAttribute('data-fabcon') || 0;
-            let bleach = element.getAttribute('data-bleach') || 0;
-
-            editForm.action = "/transaction/update/" + id;
-            
-            document.getElementById("editCustomerName").value = name;
-            document.getElementById("editWeight").value = Math.round(parseFloat(weight)) || 1;
-            document.getElementById("editServiceMode").value = mode;
-            document.getElementById("editEstimatedTime").value = time;
-            document.getElementById("editAddonDetergent").value = parseInt(detergent);
-            document.getElementById("editAddonFabcon").value = parseInt(fabcon);
-            document.getElementById("editAddonBleach").value = parseInt(bleach);
-            
-            calculateEditTotal();
-            editModal.style.display = "flex";
-        }
-
-        function incrementEditLoads() {
-            let input = document.getElementById('editWeight');
-            let val = parseInt(input.value) || 1;
-            input.value = val + 1;
-            calculateEditTotal();
-        }
-
-        function decrementEditLoads() {
-            let input = document.getElementById('editWeight');
-            let val = parseInt(input.value) || 1;
-            if(val > 1) { input.value = val - 1; }
-            calculateEditTotal();
-        }
-
-        function incrementEditAddon(inputId) {
-            let input = document.getElementById(inputId);
-            let val = parseInt(input.value) || 0;
-            input.value = val + 1;
-            calculateEditTotal();
-        }
-
-        function decrementEditAddon(inputId) {
-            let input = document.getElementById(inputId);
-            let val = parseInt(input.value) || 0;
-            if(val > 0) { input.value = val - 1; }
-            calculateEditTotal();
-        }
-
-        function calculateEditTotal() {
-            let weight = parseInt(document.getElementById('editWeight').value) || 1;
-            let detergent = parseInt(document.getElementById('editAddonDetergent').value) || 0;
-            let fabcon = parseInt(document.getElementById('editAddonFabcon').value) || 0;
-            let bleach = parseInt(document.getElementById('editAddonBleach').value) || 0;
-            
-            let baseLoadPrice = weight * 125.00;
-            let totalAddons = (detergent * 12) + (fabcon * 10) + (bleach * 15);
-            let total = baseLoadPrice + totalAddons;
-            
-            document.getElementById('editGrandTotalDisplay').innerText = total.toFixed(2);
-            document.getElementById('editTotalAmountInput').value = total.toFixed(2);
-        }
-
-        document.getElementById("closeEditModalBtn").onclick = function() { editModal.style.display = "none"; };
-        document.getElementById("cancelEditModalBtn").onclick = function() { editModal.style.display = "none"; };
-        
-        // Delete confirmation controllers
-        const deleteModal = document.getElementById("deleteModal");
-        const confirmDeleteLink = document.getElementById("confirmDeleteLink");
-        
-        function openDeleteModal(transactionId) {
-            confirmDeleteLink.href = "/transaction/delete/" + transactionId;
-            deleteModal.style.display = "flex";
-        }
-        
-        document.getElementById("closeDeleteModalBtn").onclick = function() {
-            deleteModal.style.display = "none";
-        };
-
-        // Form programmatic intercept submission handler
-       // Strict Validation and Submit Engine for Step 4
-document.getElementById("finishBtn").onclick = function() {
-    let nameInput = document.getElementById('customerName');
-    let phoneInput = document.getElementById('phoneNumber');
-    let timeInput = document.getElementById('estimatedTime');
-    
-    let nameError = document.getElementById('nameError');
-    let phoneError = document.getElementById('phoneError');
-    let timeError = document.getElementById('timeError');
-    
-    // Clear out any old red alerts
-    if (nameInput) nameInput.style.borderColor = "#cbd5e0";
-    if (phoneInput) phoneInput.style.borderColor = "#cbd5e0";
-    if (timeInput) timeInput.style.borderColor = "#cbd5e0";
-    
-    if (nameError) nameError.style.display = "none";
-    if (phoneError) phoneError.style.display = "none";
-    if (timeError) timeError.style.display = "none";
-    
-    let isStep4Valid = true;
-    
-    // Check Customer Name
-    if (!nameInput || !nameInput.value.trim()) {
-        if (nameInput) nameInput.style.borderColor = "#ff4d4d";
-        if (nameError) nameError.style.display = "block";
-        isStep4Valid = false;
-    }
-    
-    // Check Phone Number
-    if (!phoneInput || !phoneInput.value.trim()) {
-        if (phoneInput) phoneInput.style.borderColor = "#ff4d4d";
-        if (phoneError) phoneError.style.display = "block";
-        isStep4Valid = false;
-    }
-    
-    // Check Target Time
-    if (!timeInput || !timeInput.value.trim()) {
-        if (timeInput) timeInput.style.borderColor = "#ff4d4d";
-        if (timeError) timeError.style.display = "block";
-        isStep4Valid = false;
-    }
-    
-    // Only allow submission if all conditions pass completely
-    if (isStep4Valid) {
-        document.getElementById('multiStepForm').submit();
-    }
-};
-    </script>
+ 
 </body>
 </html>
