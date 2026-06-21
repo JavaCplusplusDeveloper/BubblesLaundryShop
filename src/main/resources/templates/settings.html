@@ -4,266 +4,9 @@
         <title>Settings</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <style>
-             body {
-                font-family: 'Segoe UI', Arial, sans-serif;
-                background: linear-gradient(180deg, #1e62ff 0%, #4da3ff 100%);
-                min-height: 100vh;
-                display: flex;
-                color: #333;
-                overflow-x: hidden;
-            }
+        
+        <link rel="stylesheet" href="/styles/settings.css">
 
-            /* Container Layout */
-            .app-container {
-                display: flex;
-                width: 100vw;
-                min-height: 100vh;
-            }
-
-            /* --- SIDEBAR PANEL --- */
-            .sidebar {
-                width: 260px;
-                background-color: #0052cc;
-                padding: 30px 20px;
-                display: flex;
-                flex-direction: column;
-                gap: 15px;
-                box-shadow: 4px 0 10px rgba(0,0,0,0.15);
-                position: fixed;
-                top: 0;
-                bottom: 0;
-                left: 0;
-            }
-            
-            .brand-name {
-                color: white;
-                font-size: 24px;
-                font-weight: bold;
-                margin-bottom: 30px;
-                padding-left: 10px;
-            }
-            
-            .nav-btn {
-                background-color: #79b0ff;
-                color: #002b80;
-                border: none;
-                padding: 14px 20px;
-                border-radius: 30px;
-                font-size: 16px;
-                font-weight: bold;
-                text-align: left;
-                cursor: pointer;
-            }
-            
-            .nav-btn-alt {
-                background-color: #d1e4ff;
-                color: #003da8;
-                border: none;
-                padding: 12px 20px;
-                border-radius: 12px;
-                font-size: 16px;
-                font-weight: bold;
-                text-align: center;
-                cursor: pointer;
-                text-decoration: none; /* Keeps the Queue link clean */
-                display: block; 
-            }
-
-            /* --- MAIN SCROLLABLE CONTENT --- */
-            .main-content {
-                margin-left: 300px; /* Matched exactly to sidebar width */
-                flex-grow: 1;
-                padding: 30px;
-                display: flex;
-                flex-direction: column;
-                gap: 20px; /* Aligned consistency gap */
-            }
-
-            /* Header Layout */
-            .main-header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                color: white;
-                padding-right: 20px;
-            }
-            
-            .main-header h1 {
-                margin: 0;
-                font-size: 36px;
-                font-weight: bold;
-            }
-            
-            .header-line {
-                border: none;
-                border-top: 1px solid rgba(255, 255, 255, 0.4);
-                margin: 0 0 10px 0;
-                width: 100%;
-            }
-
-       
-            .settings-panel-card {
-                background-color: #1e62ff;
-                border: 2px solid #ffffff;
-                border-radius: 16px;
-                padding: 24px;
-                display: flex;
-                flex-direction: column;
-                gap: 16px;
-                box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-                color: white;
-            }
-
-            .panel-header-group {
-                display: flex;
-                flex-direction: column;
-                gap: 4px;
-            }
-
-            .panel-title {
-                margin: 0;
-                font-size: 22px;
-                font-weight: bold;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-            }
-
-            .panel-hint {
-                font-size: 13px;
-                color: #e2ecff;
-                opacity: 0.9;
-                margin: 0;
-            }
-
-            /* Inventory Rows */
-            .alert-rows-container {
-                display: flex;
-                flex-direction: column;
-                gap: 12px;
-            }
-
-            .alert-item-row {
-                background-color: #ffffff;
-                border-radius: 12px;
-                padding: 14px 20px;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                color: #1e293b;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-            }
-
-            .item-profile-side {
-                display: flex;
-                align-items: center;
-                gap: 14px;
-            }
-
-            .item-graphic-icon {
-                font-size: 24px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background-color: #f0f6ff;
-                padding: 8px;
-                border-radius: 10px;
-                border: 1px solid #cbdbe0;
-            }
-
-            .item-label-details {
-                display: flex;
-                flex-direction: column;
-            }
-
-            .item-name-text {
-                font-size: 16px;
-                font-weight: bold;
-                color: #002266;
-            }
-
-            .item-stock-status {
-                font-size: 12px;
-                color: #64748b;
-                font-weight: 500;
-            }
-
-            .item-control-side {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-            }
-
-            .control-instruction-label {
-                font-size: 13px;
-                font-weight: 600;
-                color: #556b8d;
-            }
-
-            .alert-threshold-input {
-                width: 65px;
-                background-color: #f1f5f9;
-                border: 1px solid #cbdbe0;
-                padding: 8px 10px;
-                border-radius: 8px;
-                font-size: 14px;
-                font-weight: bold;
-                color: #002266;
-                text-align: center;
-                outline: none;
-            }
-
-            .alert-threshold-input:focus {
-                border-color: #1e62ff;
-                background-color: #ffffff;
-            }
-
-            .bell-toggle-icon {
-                font-size: 16px;
-                cursor: pointer;
-                opacity: 0.8;
-                padding: 4px;
-            }
-
-            .bell-toggle-icon:hover {
-                opacity: 1;
-                transform: scale(1.05);
-            }
-
-            /* Calibration Workspace Specifics */
-            .calibration-meta-info {
-                display: flex;
-                flex-direction: column;
-                gap: 2px;
-                margin-bottom: 4px;
-            }
-
-            .ip-address-label {
-                font-size: 14px;
-                font-weight: bold;
-                color: #ffffff;
-            }
-
-            .ip-address-value {
-                font-size: 13px;
-                color: #cbdbe0;
-                font-family: monospace;
-            }
-
-            .terminal-display-grid {
-                background-color: #eaf2ff;
-                border-radius: 12px;
-                min-height: 140px;
-                border: 1px dashed #79b0ff;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: #556b8d;
-                font-size: 14px;
-                font-weight: 500;
-            }
-      </style>
     </head>
     
     <body>
@@ -309,7 +52,7 @@
             <div class="item-control-side">
                 <span class="control-instruction-label">Alert when below:</span>
                 <input type="number" id="detergentInput" class="alert-threshold-input" th:value="${detergentLimit ?: 10}">
-                <span class="bell-toggle-icon" onclick="saveAlertThresholds()" style="cursor: pointer; font-size: 18px;" title="Save threshold">🔔</span>
+                <span class="bell-toggle-icon" onclick="saveAlertThresholds()"title="Save threshold">🔔</span>
             </div>
         </div>
 
@@ -324,7 +67,7 @@
             <div class="item-control-side">
                 <span class="control-instruction-label">Alert when below:</span>
                 <input type="number" id="fabconInput" class="alert-threshold-input" th:value="${fabconLimit ?: 10}">
-                <span class="bell-toggle-icon" onclick="saveAlertThresholds()" style="cursor: pointer; font-size: 18px;" title="Save threshold">🔔</span>
+                <span class="bell-toggle-icon" onclick="saveAlertThresholds()"title="Save threshold">🔔</span>
             </div>
         </div>
 
@@ -339,21 +82,14 @@
             <div class="item-control-side">
                 <span class="control-instruction-label">Alert when below:</span>
                 <input type="number" id="bleachInput" class="alert-threshold-input" th:value="${bleachLimit ?: 10}">
-                <span class="bell-toggle-icon" onclick="saveAlertThresholds()" style="cursor: pointer; font-size: 18px;" title="Save threshold">🔔</span>
+                <span class="bell-toggle-icon" onclick="saveAlertThresholds()"  title="Save threshold">🔔</span>
             </div>
         </div>
     </div>
 </div> 
-            <script>
-    function saveAlertThresholds() {
-        let detergent = document.getElementById('detergentInput').value;
-        let fabcon = document.getElementById('fabconInput').value;
-        let bleach = document.getElementById('bleachInput').value;
-        
-        // Fires all updated values over to your Spring Boot Controller route 
-        window.location.href = "/settings/save?detergent=" + detergent + "&fabcon=" + fabcon + "&bleach=" + bleach;
-    }
-</script>
+         <script th:src="@{/script/settings.js}"></script>
+
+        <
 
             </body>
 </html>

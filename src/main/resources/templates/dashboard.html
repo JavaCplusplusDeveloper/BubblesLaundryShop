@@ -6,11 +6,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bubbles Laundry Shop Order Queue</title>
-    <link rel="stylesheet" href="/styles/dashboard.css">
+    
+     <link rel="stylesheet" href="/styles/dashboard.css">
+        
+    
    
 </head>
 <body>
-   <script th:src="@{/script/dashboard.js}"></script>
+    
     <div class="app-container">
         <div class="sidebar">
             <div class="brand-name">Bubbles Mini Store</div>
@@ -77,7 +80,7 @@
                         <div class="card-details">
                             <div class="detail-highlight" >
                                 <span style="font-size: 16px; margin-bottom: 2px;">🧺</span> 
-                                <span class="number-load" th:text="${#numbers.formatDecimal(transaction.weight, 0, 0)} + ' Load'">1 Load</span>
+                                <span style="font-size: 12px; color: #4a5568; font-weight: 500;" th:text="${#numbers.formatDecimal(transaction.weight, 0, 0)} + ' Load'">1 Load</span>
                             </div>
                             <div class="detail-highlight">
                                 <span style="font-size: 16px; margin-bottom: 2px;" th:text="${transaction.serviceMode == 'Delivery' ? '🚗' : '🏪'}">🏪</span> 
@@ -85,7 +88,7 @@
                             </div>
                             <div class="detail-highlight">
                                 <span style="font-size: 16px; margin-bottom: 2px;">🕒</span> 
-                                <span class="time" th:text="${transaction.estimatedTime ?: '3:00 pm'}">3:00 pm</span>
+                                <span style="font-size: 12px; color: #4a5568; font-weight: 500;" th:text="${transaction.estimatedTime ?: '3:00 pm'}">3:00 pm</span>
                             </div>
                         </div>
 
@@ -144,7 +147,7 @@
                         <div class="card-details">
                             <div class="detail-highlight">
                                 <span style="font-size: 16px; margin-bottom: 2px;">🧺</span> 
-                                <span class="number-load" th:text="${#numbers.formatDecimal(transaction.weight, 0, 0)} + ' Load'">1 Load</span>
+                                <span style="font-size: 12px; color: #4a5568; font-weight: 500;" th:text="${#numbers.formatDecimal(transaction.weight, 0, 0)} + ' Load'">1 Load</span>
                             </div>
 
                             <div class="detail-highlight" >
@@ -154,7 +157,7 @@
                             
                             <div class="detail-highlight" >
                                 <span style="font-size: 16px; margin-bottom: 2px;">🕒</span> 
-                                <span class="time" th:text="${transaction.estimatedTime ?: '3:00 pm'}">3:00 pm</span>
+                                <span style="font-size: 12px; color: #4a5568; font-weight: 500;" th:text="${transaction.estimatedTime ?: '3:00 pm'}">3:00 pm</span>
                             </div>
                         </div>
 
@@ -213,7 +216,7 @@
                         <div class="card-details">
                             <div class="detail-highlight" >
                                 <span style="font-size: 16px; margin-bottom: 2px;">🧺</span> 
-                                <span class="number-load" th:text="${#numbers.formatDecimal(transaction.weight, 0, 0)} + ' Load'">1 Load</span>
+                                <span style="font-size: 12px; color: #4a5568; font-weight: 500;" th:text="${#numbers.formatDecimal(transaction.weight, 0, 0)} + ' Load'">1 Load</span>
                             </div>
                             <div class="detail-highlight" >
                                 <span style="font-size: 16px; margin-bottom: 2px;" th:text="${transaction.serviceMode == 'Delivery' ? '🚗' : '🏪'}">🏪</span> 
@@ -221,7 +224,7 @@
                             </div>
                             <div class="detail-highlight" >
                                 <span style="font-size: 16px; margin-bottom: 2px;">🕒</span> 
-                                <span class="time" th:text="${transaction.estimatedTime ?: '3:00 pm'}">3:00 pm</span>
+                                <span style="font-size: 12px; color: #4a5568; font-weight: 500;" th:text="${transaction.estimatedTime ?: '3:00 pm'}">3:00 pm</span>
                             </div>
                         </div>
 
@@ -503,7 +506,8 @@
             </div>
         </div>
     </div>
-
+    <script th:src="@{/script/dashboard.js}"></script>
+    
     
  
 </body>
