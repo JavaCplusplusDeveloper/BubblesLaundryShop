@@ -84,6 +84,7 @@ public class Dashboard {
     public String updateTransaction(@PathVariable Integer id, @ModelAttribute Transaction updatedTx) {
             
       transactionService.updateTransaction_AdjustStock(id, updatedTx);
+      System.out.println("updatedTransaction");
         
         return "redirect:/";
         

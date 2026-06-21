@@ -1,6 +1,5 @@
 
 package BubblesLaundrySystem.Service;
-
 import BubblesLaundrySystem.Model.InventoryItem;
 import BubblesLaundrySystem.Repository.InventoryItemR;
 import java.util.List;
