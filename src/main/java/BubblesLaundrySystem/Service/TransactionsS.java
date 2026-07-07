@@ -3,13 +3,14 @@ package BubblesLaundrySystem.Service;
 
 import BubblesLaundrySystem.Model.Transaction;
 import BubblesLaundrySystem.Repository.TransactionsR;
-import jakarta.transaction.Transactional;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@NonNull
 public class TransactionsS {
      
    @Autowired
@@ -20,32 +21,19 @@ public class TransactionsS {
     
     public Transaction createTransaction(Transaction transaction){ transaction.setOrderDate(LocalDateTime.now());
     
-    if (transaction.getStatus()==null){
-      transaction.setStatus("Pending");
-    }
+    transaction.setStatus("Pending");
     
-    int detergentUsed;
-    int bleachUsed;
-    int fabconUsed;
+    int detergentUsed = 0;
+    int bleachUsed = 0;
+    int fabconUsed =0;
     
-    if (transaction.getDetergentQty() != null){
-        detergentUsed = transaction.getDetergentQty();
-    }else{
-        detergentUsed = 0;
-    }
-     if (transaction.getBleachQty() != null){
-         bleachUsed = transaction.getBleachQty();
-    }else{
-         bleachUsed = 0;
-     }
-     if(transaction.getFabconQty() != null) { fabconUsed  = transaction.getFabconQty();
-     }else{ 
-         fabconUsed = 0;
-     }
+    detergentUsed = transaction.getDetergentQty();
+    bleachUsed = transaction.getBleachQty();
+    fabconUsed  = transaction.getFabconQty();
      
-     inventoryService.deductStock("Detergent", detergentUsed);
-     inventoryService.deductStock("Bleach", bleachUsed);
-     inventoryService.deductStock("Fabcon", fabconUsed);
+    inventoryService.deductStock("Detergent", detergentUsed);
+    inventoryService.deductStock("Bleach", bleachUsed);
+    inventoryService.deductStock("Fabcon", fabconUsed);
      
     return transactionRepository.save(transaction);}
     
@@ -53,13 +41,17 @@ public class TransactionsS {
         return transactionRepository.findAll();
     }
     public Transaction getTransactionById(Integer Id){
-        return transactionRepository.findById(Id).orElse(null);
+        return transactionRepository.findById(Id).get();
     }
     
     
     public Transaction updateStatus(Integer id,String newStatus){
+    
     Transaction transaction = getTransactionById(id);
-    if (transaction != null){transaction.setStatus(newStatus); return transactionRepository.save(transaction);}return null;}
+    
+    transaction.setStatus(newStatus); return transactionRepository.save(transaction);
+
+    }
     
     
     public void deleteTransaction(Integer id){
@@ -76,68 +68,48 @@ public class TransactionsS {
      return  transactionRepository.findByStatus(status);
     }
     
-     @Transactional
+
+    //All Transactions and Addons will be adjusted
     public void updateTransaction_AdjustStock(Integer id, Transaction updatedTx) {
         Transaction tx = getTransactionById(id);
                 
-         if (tx != null) {
+         
             // CALCULATE DIFFERENCES (New Form Quantity - Existing Database Quantity)
             
-            int oldDetergent;
-            int newDetergent; 
-            int detergentDiff;
+            int oldDetergent = 0;
+            int newDetergent = 0; 
+            int detergentDiff = 0;
             
-            int oldFabcon;
-            int newFabcon; 
-            int fabconDiff; 
+            int oldFabcon = 0;
+            int newFabcon = 0; 
+            int fabconDiff = 0; 
             
-            int oldBleach;
-            int newBleach;
-            int bleachDiff;
+            int oldBleach = 0;
+            int newBleach = 0;
+            int bleachDiff = 0;
             
             
-            if(tx.getDetergentQty() != null){
-                oldDetergent = tx.getDetergentQty();
-            }else{
-                oldDetergent = 0;
-            }
-            if(updatedTx.getDetergentQty() != null){
-                newDetergent = updatedTx.getDetergentQty();
-            }else{
-                newDetergent = 0;
-            }
+            //addons comparing old and new
+            oldDetergent = tx.getDetergentQty();
+            newDetergent = updatedTx.getDetergentQty();
             detergentDiff = newDetergent - oldDetergent;
 
-            
-            if(tx.getFabconQty() != null){
-                oldFabcon = tx.getFabconQty();
-            }else{
-                oldFabcon= 0;
-            }
-            
-            if(updatedTx.getFabconQty() != null){
-                newFabcon = updatedTx.getFabconQty();
-            }else{
-                newFabcon= 0;
-            }
-            
+            oldFabcon = tx.getFabconQty();
+            newFabcon = updatedTx.getFabconQty();
             fabconDiff = newFabcon - oldFabcon;
-
-            if(tx.getBleachQty() != null){
-                oldBleach= tx.getBleachQty();
-            }else{oldBleach= 0;
-            }
             
-            if(updatedTx.getBleachQty() != null){newBleach= updatedTx.getBleachQty();}else{newBleach=0;}
-            
-             bleachDiff = newBleach - oldBleach;
+            oldBleach= tx.getBleachQty();
+            newBleach= updatedTx.getBleachQty();
+            bleachDiff = newBleach - oldBleach;
 
-            // 2. Adjust stock using your custom inventory rule handler
+
+            // 2. Adjust stocks in theinventory
             inventoryService.adjustAddonStock("Detergent", detergentDiff);
             inventoryService.adjustAddonStock("Fabcon", fabconDiff);
             inventoryService.adjustAddonStock("Bleach", bleachDiff);
 
-            // 3. Map the updated details back to the managed entity row
+
+            // 3. updates all the variable inside of the reedit button
             tx.setCustomerName(updatedTx.getCustomerName());
             tx.setPhoneNumber(updatedTx.getPhoneNumber());
             tx.setWeight(updatedTx.getWeight());
@@ -153,5 +125,5 @@ public class TransactionsS {
             transactionRepository.save(tx);
         }
     }
-}
+
 

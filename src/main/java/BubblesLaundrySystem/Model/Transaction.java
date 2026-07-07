@@ -8,11 +8,12 @@ import lombok.*;
 @Entity
 @Data
 @Table(name = "Laundry_Transactions")
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor 
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Setter
 @ToString
+@NonNull
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

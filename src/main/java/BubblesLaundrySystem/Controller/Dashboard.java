@@ -42,41 +42,31 @@ public class Dashboard {
 
     @GetMapping("/transaction/start/{id}")
     public String startWash(@PathVariable Integer id){
-        Transaction tx = transactionService.getAllTransaction().stream()
-                .filter(t -> t.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+        Transaction tx = transactionService.getTransactionById(id);
+        
            
-        if(tx != null){
             tx.setStatus("Washing");
             transactionService.saveTransaction(tx);
-        }
-        
+
         return "redirect:/";
     }
     
     @GetMapping("/transaction/done/{id}")
     public String markAsDone(@PathVariable Integer id){
-        Transaction tx = transactionService.getAllTransaction().stream()
-                .filter(t -> t.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+        Transaction tx = transactionService.getTransactionById(id);
         
-        if (tx != null){
-            tx.setStatus("Done");
-            transactionService.saveTransaction(tx);
-        }
+        tx.setStatus("Done");
+        transactionService.saveTransaction(tx);
+        
         return "redirect:/";
     }
    
     @GetMapping("/transaction/delete/{id}")
     public String deleteTransaction(@PathVariable Integer id) {
-        Transaction tx = transactionService.getAllTransaction().stream().filter(t -> t.getId().equals(id)).findFirst().orElse(null);
-                
-        if (tx != null) {
-            transactionService.deleteTransaction(id) ;
+        
+        transactionService.deleteTransaction(id) ;
            
-        }
+        
         return "redirect:/"; 
     }
 

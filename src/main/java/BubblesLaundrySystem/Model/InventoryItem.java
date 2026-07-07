@@ -9,10 +9,11 @@ import lombok.*;
 @Data
 @Table(name = "inventory_items")
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor (access = AccessLevel.PROTECTED)
 @ToString
 @Getter
 @Setter
+@NonNull // an explicit null check is also generated or making sure theres an object inside of the database
 public class InventoryItem {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -27,10 +28,10 @@ public class InventoryItem {
     
 
     public int getStockPercentage(){
-      if (this.quantity==null|| this.quantity ==0 ){return 0;}
+      
             
       int maxQuantity =100;
-      return (int) Math.round(((double)this.quantity/maxQuantity)*100);
+      return quantity/maxQuantity;
 }
     
   

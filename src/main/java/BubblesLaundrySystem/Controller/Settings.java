@@ -23,11 +23,11 @@ public class Settings {
          @RequestParam(value = "fabcon", defaultValue = "10") int fabcon,
          @RequestParam(value = "bleach", defaultValue = "10") int bleach){
  
-        Inventory.detergentLimit = detergent;
-        Inventory.fabconLimit = fabcon;
-        Inventory.bleachLimit = bleach;
+         Inventory.detergentLimit = detergent;
+         Inventory.fabconLimit = fabcon;
+         Inventory.bleachLimit = bleach;
         
-        // Clean redirect back to settings view
-        return "redirect:/settings";
+        
+         return "redirect:/settings";
     }
 }

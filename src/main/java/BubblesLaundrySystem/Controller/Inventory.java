@@ -25,89 +25,38 @@ public class Inventory {
     
     @GetMapping("/inventory")
     public String inventoryTab(Model model){
-    List<InventoryItem> items = inventoryService.getAllItems();
-    List<Transaction> transactions = transactionService.getAllTransaction();
 
+        List<InventoryItem> items = inventoryService.getAllItems();
+        List<Transaction> transactions = transactionService.getAllTransaction();
 
-    long lowStockCount = items.stream().filter(item ->{
+        int lowStockCount = inventoryService.getLowStockCount(items, detergentLimit, fabconLimit, bleachLimit);
+        int totalDetergent = inventoryService.getTotalDetergent(transactions);
+        int totalFabcon = inventoryService.getTotalFabcon(transactions);
+        int totalBleach = inventoryService.getTotalBleach(transactions);
+
+        int totalUsageCount = totalDetergent + totalFabcon + totalBleach;
+
+        model.addAttribute("items", items);
+        model.addAttribute("transactions", transactions);
+        model.addAttribute("totalDetergent", totalDetergent);
+        model.addAttribute("totalFabcon", totalFabcon);
+        model.addAttribute("totalBleach", totalBleach);
         
-        
-        if (item.getQuantity() == null) return true;
-        if (item.getItemName().toLowerCase().contains("detergent") || item.getItemName().toLowerCase().contains("ariel")){
-            return item.getQuantity() < detergentLimit;
-        
-        }else if(item.getItemName().toLowerCase().contains("fabcon") || item.getItemName().toLowerCase().contains("fabric")){
-            return item.getQuantity() < fabconLimit;
-            
-        }else if(item.getItemName().toLowerCase().contains("bleach")){
-            return item.getQuantity() < bleachLimit;
-        }
-        return item.getQuantity() < 10; 
-        
-        }).count();
+        model.addAttribute("usageTodayCount", totalUsageCount);
+        model.addAttribute("lowStockCount", lowStockCount);
 
-        int totalDetergent = 0;
-        int totalFabcon = 0;
-        int totalBleach = 0;
-
-        for (Transaction t : transactions){
-   
-        if (t.getDetergentQty() != null) {
-        totalDetergent += t.getDetergentQty();
-         }else{
-        totalDetergent += 0; 
-    }
-
-   
-        if (t.getFabconQty() != null){
-        totalFabcon += t.getFabconQty();
-       }else{
-        totalFabcon += 0; 
-       }
-
+        model.addAttribute("detergentLimit", detergentLimit);
+        model.addAttribute("fabconLimit", fabconLimit);
+        model.addAttribute("bleachLimit", bleachLimit);
     
-       if (t.getBleachQty() != null) {
-        totalBleach += t.getBleachQty();
-       }else{
-        totalBleach += 0; 
-       }
-     }
-    int totalUsageCount = totalDetergent + totalFabcon + totalBleach;
-    
-    // model attributes
-    model.addAttribute("items", items);
-    model.addAttribute("transactions", transactions);
-    model.addAttribute("totalDetergent", totalDetergent);
-    model.addAttribute("totalFabcon", totalFabcon);
-    model.addAttribute("totalBleach", totalBleach);
-    model.addAttribute("usageTodayCount", totalUsageCount);
-    
-    // Dynamic alerts added to the model:
-    model.addAttribute("lowStockCount", lowStockCount);
-    model.addAttribute("detergentLimit", detergentLimit);
-    model.addAttribute("fabconLimit", fabconLimit);
-    model.addAttribute("bleachLimit", bleachLimit);
-   
-    return "inventory";
+        return "inventory";
 }
     
     
     @GetMapping("/inventory/restock/{id}")
-    public String restockItem(@PathVariable("id") Integer id,@RequestParam("amount") int amount){
-        InventoryItem item = inventoryService.getItemById(id);
-        
-        if(item !=null){
-          int currentQty; 
-          
-          if (item.getQuantity()!= null){
-              currentQty = item.getQuantity();
-          }else{
-              currentQty=0;
-          }
-          item.setQuantity(currentQty + amount);
-          item.setLastRestocked(java.time.LocalDateTime.now());
-          inventoryService.saveItem(item);
-        }
+    public String restockItem(@PathVariable("id") Integer id,InventoryItem inventory, @RequestParam("amount") int amount){
+        inventoryService.restockInventory(id, inventory,amount);
+    
         return "redirect:/inventory";
         }
         
